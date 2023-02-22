@@ -1,5 +1,5 @@
 # Task manager app
-Django-To-Do is a Django Web Application that helps you maintain your tasks and To-DO. It includes user registration and login.
+Task Manager is a Django Web Application that helps you maintain your tasks and To-DOs.It includes user registration and login, CRUD of tasks and mark your pending tasks as completed.
 ## Setup
 
 1. Clone the repository:
