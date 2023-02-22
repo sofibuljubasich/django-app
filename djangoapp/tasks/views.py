@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Task
 from .forms import TaskForm
 
@@ -66,23 +67,27 @@ def create_task(request):
             new_task = form.save(commit = False)
             new_task.user = request.user
             new_task.save()
+            messages.success(request, "Task created succesfully")
             return redirect('tasks')
         except ValueError:
+            
             return render(request, 'create_task.html',{"form":TaskForm,"error":"Error at creating task"})
 
 @login_required
 def completed_task(request,task_id):
     task = get_object_or_404(Task,pk=task_id,user=request.user)
-    if request.method == 'POST':
+    if request.method == 'GET':
         task.finished = timezone.now()
+        messages.success(request, "Task finished")
         task.save()
-    return redirect('tasks')
+    return redirect('tasks_completed')
 
 @login_required
 def delete_task(request, task_id):
    
-    if request.method == 'POST':
+    if request.method == 'GET':
         task = get_object_or_404(Task,pk = task_id,user=request.user)
+        messages.warning(request, "Task Deleted")
         task.delete()
     return redirect('tasks')
     
@@ -91,12 +96,15 @@ def task_detail(request, task_id):
     if request.method == 'GET':
         task = get_object_or_404(Task, pk=task_id, user=request.user)
         form = TaskForm(instance=task)
+      
         return render(request, 'task_detail.html', {'task': task, 'form': form})
     else:
         try:
             task = get_object_or_404(Task, pk=task_id, user=request.user)
             form = TaskForm(request.POST, instance=task)
+            messages.success(request, "Task updated succesfully")
             form.save()
             return redirect('tasks')
         except ValueError:
-            return render(request, 'task_detail.html', {'task': task, 'form': form, 'error': 'Error updating task.'})
+            messages.error(request,"Error while updating task")
+            return render(request, 'task_detail.html', {'task': task, 'form': form})

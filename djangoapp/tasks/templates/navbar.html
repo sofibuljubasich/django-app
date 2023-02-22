@@ -16,12 +16,12 @@
         <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a href="{% url 'tasks_completed' %}" class="nav-link"
-              >Finished tasks</a
+            <a href="{% url 'tasks' %}" class="nav-link"
+              >Tasks </a
             >
           </li>
           <li class="nav-item">
-            <a href="{% url 'tasks' %}" class="nav-link">Tasks</a>
+            <a href="{% url 'tasks_completed' %}" class="nav-link">Tasks completed</a>
           </li>
           <li class="nav-item">
             <a href="{% url 'create_task' %}" class="nav-link">Create Task</a>
